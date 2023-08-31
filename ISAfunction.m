@@ -31,7 +31,7 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 %   ...
 %
 % Authors
-  liuID1 = "examp978" % author 1 name / <LiU ID 1>
+  liuID1 = "nikgi434" % author 1 name / <LiU ID 1>
   liuID2 = "namex123" % author 2 name / <LiU ID 2> (leaf empty [] if one person only)
 %
 % License
