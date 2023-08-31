@@ -32,7 +32,7 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 %
 % Authors
   liuID1 = "nikgi434" % author 1 name / <LiU ID 1>
-  liuID2 = "namex123" % author 2 name / <LiU ID 2> (leaf empty [] if one person only)
+  liuID2 = "leomu719" % author 2 name / <LiU ID 2> (leaf empty [] if one person only)
 %
 % License
 %   This program is part of an academic exercise for the course TMAL02,
