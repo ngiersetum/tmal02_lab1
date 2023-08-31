@@ -67,7 +67,7 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 % The input values come in geometrical altitude, right? Do we need to
 % convert them? How?
     g = g0 + (r0/(r0+Z))^2;
-    
+    H = 1/g0 * integral(g, 0, Z);
         
 % What are the "primary" properties that we need to compute from the
 % reference values and their equations? Which others can be computed later
