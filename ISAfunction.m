@@ -80,7 +80,7 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 % Let's make a loop as long as the number of inputs we caounted before!
 % Type "help for" in the Command Window".
     for j = 1:nInput
-        
+        b = 1;
         % Now that we are inside the loop, for each one of the inputs, we
         % need to identify the right layer and apply the right equations.
         % Tip: use "if" clauses, like "if H(j) <= Hb(x)". Type "help if" 
@@ -89,24 +89,28 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
             T(j) = NaN;
             P(j) = NaN;
         elseif Z(j) <= Hb(2) % b=0
-            X(j) = 0
+            b = 1;
         elseif Z(j) <= Hb(3) % b=1
-            X(j) = 0
+            b = 2;
         elseif Z(j) <= Hb(4) % b=2
-            X(j) = 0
+            b = 3;
         elseif Z(j) <= Hb(5) % b=3
-            X(j) = 0
+            b = 4;
         elseif Z(j) <= Hb(6) % b=4
-            X(j) = 0
+            b = 5;
         elseif Z(j) <= Hb(7) % b=5
-            X(j) = 0
+            b = 6;
         elseif Z(j) <= Hb(8) % b=6
-            X(j) = 0
+            b = 7;
         elseif Z(j) > Hb(8) % b=7
             T(j) = NaN;
             P(j) = NaN;
         end
-    
+
+
+        T(j) = Tb(b) + bet(b) .* (H - Hb(b))
+        P(j) = pb(b) .* (T(j)./(T(j) + bet(j) .* (H - Hb(b)))).^((g0 .* M0)/(R .* bet(b)))
+
         % Calculate density, speed of sound, and dynamic viscosity
         rho(j) = (P(j).*M0)./(T(j).*R);
         a(j) = sqrt((gamma.*R.*T(j))./(M0));
