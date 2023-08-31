@@ -53,16 +53,16 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
     S = 110; %[K]
     Hb =[0, 11000, 20000, 32000, 47000, 51000, 71000, 84852]; %[m]
     bet = [-6.5, 0, 1, 2.8, 0, -2.8, -2.0];
-    Tb =[reference temperature values];
-    pb = [reference pressure values];
-    rhob = 1.2250; %[kg/m³]
-    ab = 340.294; %[m/s]
-    mub = 1.7894e-5; %[kg/ms]
+    Tb =[0];
+    pb = [0];
+    rhob = [1.2250]; %[kg/m³]
+    ab = [340.294]; %[m/s]
+    mub = [1.7894e-5]; %[kg/ms]
     
     
 % How many input values do we have? One? Two? Or several? Maybe we need to 
 % count them! Tip: type "help length" in the Command Window.
-    nInput = ...
+    nInput = length(Z)
     
 % The input values come in geometrical altitude, right? Do we need to
 % convert them? How?
@@ -82,21 +82,20 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
         % need to identify the right layer and apply the right equations.
         % Tip: use "if" clauses, like "if H(j) <= Hb(x)". Type "help if" 
         % in the Command Window.
-        if Z(j) <= Hb(x)
-                X(j) = ...   
-        elseif ...
-                X(j) = ...   
+        if Z(j) <= Hb(1)
+                X(j) = 0
+        elseif 1==1
+                X(j) = 0
         else
-                ...
+                0
         end
     
         % We are still inside the main loop. Now that we have calculated 
         % the "primary" properties for this step, we can use them to 
         % calculate the rest of the properties, right?
-        X(j) = ...;
-        X(j) = ...;
-        X(j) = ...;
-        ...
+        X(j) = 0;
+        X(j) = 0;
+        X(j) = 0;
     
     end
 
@@ -104,7 +103,5 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 % function. If you want, you can name the variables here so they will be
 % displayed in the command window:
     X
-    Y
-    ...
 
 end
