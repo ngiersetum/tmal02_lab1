@@ -61,7 +61,7 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 
 % Initialize arrays just so they don't change size every iteration later
     H = zeros(size(Z));
-    
+
     T = zeros(size(Z));
     P = zeros(size(Z));
     rho = zeros(size(Z));
@@ -101,7 +101,11 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
         if ~isnan(b)
             % Calculate primary properties: temperature and pressure
             T(j) = Tb(b) + bet(b) .* (H(j) - Hb(b));
-            P(j) = pb(b) .* (T(j)./(T(j) + bet(b) .* (H(j) - Hb(b)))).^((g0 .* M0)/(R .* bet(b)));
+            if bet(b) ~= 0
+                P(j) = pb(b) .* (T(j)./(T(j) + bet(b) .* (H(j) - Hb(b)))).^((g0 .* M0)/(R .* bet(b)));
+            else
+                P(j) = pb(b) .* exp((-g0 .* M0 .* (H(j) - Hb(b))) ./ (R .* T(j)));
+            end
 
             % Calculate secondary properties: density, speed of sound, and dynamic viscosity
             rho(j) = (P(j).*M0)./(T(j).*R);

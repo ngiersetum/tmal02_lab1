@@ -76,7 +76,7 @@ plot(muScaled(:), altitudes(:))
 % by "_{myText}"):
 xlabel('T/T_{0} , P/P_{0} , \rho/\rho_{0} , a/a_{0} , \mu/\mu_{0} [-]');
 ylabel('Z [km]');
-Title('...');
+title('...');
 legend('T/T_{0}', 'P/P_{0}', '\rho/\rho_{0}', 'a/a_{0}', '\mu/\mu_{0}', 'Location', 'NorthWest');
 ...
 
