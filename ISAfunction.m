@@ -1,5 +1,6 @@
 function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
-% ISA function - Include a brief description here.   
+% ISA function - Calculate atmospheric properties for one or several
+% altitudes
 %
 % Synopsis
 %   [T P rho a mu liuid1 liuid2] = ISAfunction(Z)
@@ -31,8 +32,8 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 %   ...
 %
 % Authors
-  liuID1 = "nikgi434" % author 1 name / <LiU ID 1>
-  liuID2 = "leomu719" % author 2 name / <LiU ID 2> (leaf empty [] if one person only)
+  liuID1 = "nikgi434"; % author 1 name / <LiU ID 1>
+  liuID2 = "leomu719"; % author 2 name / <LiU ID 2>
 %
 % License
 %   This program is part of an academic exercise for the course TMAL02,
@@ -63,14 +64,14 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
     mub = [1.7894e-5]; %[kg/ms]
     
     
-% How many input values do we have? One? Two? Or several? Maybe we need to 
-% count them! Tip: type "help length" in the Command Window.
+% Determine number of input altitudes
     nInput = length(Z);
     
-% The input values come in geometrical altitude, right? Do we need to
-% convert them? How?
-    g = @(Z) g0 .* (r0./(r0+Z)).^2;
-    H = 1/g0 .* integral(g, 0, Z);
+% Convert input (geometrical altitude) to geopotential altitude for
+% calculations
+    g = @(Z) g0 .* (r0./(r0+Z)).^2;   % function for calculation of g
+%     H = 1/g0 .* integral(g, 0, Z);
+    H = Z;   % initialize array just so it doesn't change size every iteration later
         
 % What are the "primary" properties that we need to compute from the
 % reference values and their equations? Which others can be computed later
@@ -80,38 +81,43 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 % Let's make a loop as long as the number of inputs we caounted before!
 % Type "help for" in the Command Window".
     for j = 1:nInput
+
+        H(j) = 1/g0 .* integral(g, 0, Z(j))   % integral wants scalars so we do it separately for each altitude value
+
         b = 1;
         % Now that we are inside the loop, for each one of the inputs, we
         % need to identify the right layer and apply the right equations.
         % Tip: use "if" clauses, like "if H(j) <= Hb(x)". Type "help if" 
         % in the Command Window.
-        if Z(j) <= Hb(1) % below sea level
+        if H(j) <= Hb(1)        % below sea level
             T(j) = NaN;
             P(j) = NaN;
-        elseif Z(j) <= Hb(2) % b=0
+        elseif H(j) <= Hb(2)    % b=0
             b = 1;
-        elseif Z(j) <= Hb(3) % b=1
+        elseif H(j) <= Hb(3)    % b=1
             b = 2;
-        elseif Z(j) <= Hb(4) % b=2
+        elseif H(j) <= Hb(4)    % b=2
             b = 3;
-        elseif Z(j) <= Hb(5) % b=3
+        elseif H(j) <= Hb(5)    % b=3
             b = 4;
-        elseif Z(j) <= Hb(6) % b=4
+        elseif H(j) <= Hb(6)    % b=4
             b = 5;
-        elseif Z(j) <= Hb(7) % b=5
+        elseif H(j) <= Hb(7)    % b=5
             b = 6;
-        elseif Z(j) <= Hb(8) % b=6
+        elseif H(j) <= Hb(8)    % b=6
             b = 7;
-        elseif Z(j) > Hb(8) % b=7
+        else                    % b=7
             T(j) = NaN;
             P(j) = NaN;
         end
 
+        b
 
-        T(j) = Tb(b) + bet(b) .* (H - Hb(b))
-        P(j) = pb(b) .* (T(j)./(T(j) + bet(j) .* (H - Hb(b)))).^((g0 .* M0)/(R .* bet(b)))
 
-        % Calculate density, speed of sound, and dynamic viscosity
+        T(j) = Tb(b) + bet(b) .* (H(j) - Hb(b))
+        P(j) = pb(b) .* (T(j)./(T(j) + bet(j) .* (H(j) - Hb(b)))).^((g0 .* M0)/(R .* bet(b)))
+
+        % Calculate secondary properties: density, speed of sound, and dynamic viscosity
         rho(j) = (P(j).*M0)./(T(j).*R);
         a(j) = sqrt((gamma.*R.*T(j))./(M0));
         mu(j) = (beta.*(T(j).^(1.5)))./(T(j)+S);
