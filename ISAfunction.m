@@ -61,6 +61,7 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 
 % Initialize arrays just so they don't change size every iteration later
     H = zeros(size(Z));
+    
     T = zeros(size(Z));
     P = zeros(size(Z));
     rho = zeros(size(Z));
@@ -73,14 +74,11 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
         % Integral wants scalars so we do it separately for each altitude value
         H(j) = 1/g0 .* integral(g, 0, Z(j));
 
+        % Determine which layer we are in. Outside of boundaries all
+        % properties will be set to NaN.
         b = 1;
-        % Now that we are inside the loop, for each one of the inputs, we
-        % need to identify the right layer and apply the right equations.
-        % Tip: use "if" clauses, like "if H(j) <= Hb(x)". Type "help if" 
-        % in the Command Window.
         if H(j) <= Hb(1)        % below sea level
-            T(j) = NaN;
-            P(j) = NaN;
+            b = NaN;
         elseif H(j) <= Hb(2)    % b=0
             b = 1;
         elseif H(j) <= Hb(3)    % b=1
@@ -96,28 +94,25 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
         elseif H(j) <= Hb(8)    % b=6
             b = 7;
         else                    % b=7
-            T(j) = NaN;
-            P(j) = NaN;
+            b = NaN;
         end
 
-        b;
+        % Calculate properties. If outside boundaries result is NaN
+        if ~isnan(b)
+            % Calculate primary properties: temperature and pressure
+            T(j) = Tb(b) + bet(b) .* (H(j) - Hb(b));
+            P(j) = pb(b) .* (T(j)./(T(j) + bet(b) .* (H(j) - Hb(b)))).^((g0 .* M0)/(R .* bet(b)));
 
-
-        T(j) = Tb(b) + bet(b) .* (H(j) - Hb(b));
-        P(j) = pb(b) .* (T(j)./(T(j) + bet(b) .* (H(j) - Hb(b)))).^((g0 .* M0)/(R .* bet(b)));
-
-        % Calculate secondary properties: density, speed of sound, and dynamic viscosity
-        rho(j) = (P(j).*M0)./(T(j).*R);
-        a(j) = sqrt((gamma.*R.*T(j))./(M0));
-        mu(j) = (beta.*(T(j).^(1.5)))./(T(j)+S);
-    
+            % Calculate secondary properties: density, speed of sound, and dynamic viscosity
+            rho(j) = (P(j).*M0)./(T(j).*R);
+            a(j) = sqrt((gamma.*R.*T(j))./(M0));
+            mu(j) = (beta.*(T(j).^(1.5)))./(T(j)+S);
+        else
+            T(j) = NaN;
+            P(j) = NaN;
+            rho(j) = NaN;
+            a(j) = NaN;
+            mu(j) = NaN;
+        end
     end
-
-% Output calculated values
-%     T
-%     P
-%     rho
-%     a
-%     mu
-
 end
