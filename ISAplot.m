@@ -63,8 +63,13 @@ muScaled = mu ./ mu0;
 figure
 hold on
 grid on
+xlim([0 1])
 
-plot(altitudes(:), TScaled(:))
+plot(TScaled(:), altitudes(:))
+plot(pScaled(:), altitudes(:))
+plot(rhoScaled(:), altitudes(:))
+plot(aScaled(:), altitudes(:))
+plot(muScaled(:), altitudes(:))
 
 % And, in order to make the figure look decent, we can add and change some
 % of the plot properties (subscripts are like in Latex Math mode indicated
