@@ -13,15 +13,15 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 %   (scalar or vector) P      Pressure, Pa
 %   (scalar or vector) rho    Density, kg/m^3
 %   (scalar or vector) a      Sound speed, m/s
-%   (scalar or vector) mu     Dynamic viscosity, kg/(m s)
+%   (scalar or vector) mu     Dynamic viscosity, kg/(m*s)
 %
 % References
 %   <Reference List like Papers>
 %   ...
 %
 % Authors
-    liuID1 = "nikgi434"; % author 1 name / <LiU ID 1>
-    liuID2 = "leomu719"; % author 2 name / <LiU ID 2>
+    liuID1 = "nikgi434"; % Niklas Gierse
+    liuID2 = "leomu719"; % Leonhard Muehlstrasser
 %
 % License
 %   This program is part of an academic exercise for the course TMAL02,
@@ -34,21 +34,17 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 %% The executable code starts here:
 % Define constants and reference values
     
-    g0 = 9.80665; %[m/s²]
-    r0 = 6356766; %[m]
-    R = 8.31432e3; %[(N*m)/(kmol*K)]
-    gamma = 1.4; %dimensionless
-    beta = 1.458e-6; %[kg/(s*m*K^1/2)]
-    bs = [0, 1, 2, 3, 4, 5, 6, 7];
-    S = 110; %[K] (Sutherland Constant)
-    Hb =[0, 11000, 20000, 32000, 47000, 51000, 71000, 84852]; %[m']
+    g0 = 9.80665; % [m/s^2]
+    r0 = 6356766; % [m]
+    R = 8.31432e3; % [(N*m)/(kmol*K)]
+    gamma = 1.4; % [-] (heat capacity ratio)
+    beta = 1.458e-6; % [kg/(s*m*K^1/2)]
+    S = 110; % [K] (Sutherland Constant)
+    Hb = [0, 11000, 20000, 32000, 47000, 51000, 71000, 84852]; %[m']
     bet = [-0.0065, 0, 0.001, 0.0028, 0, -0.0028, -0.0020]; %[K/m]
-    Tb =[288.15, 216.650, 216.650, 228.650, 270.650, 270.560, 214.650, 186.8673]; %[K]
+    Tb = [288.15, 216.650, 216.650, 228.650, 270.650, 270.560, 214.650, 186.8673]; % [K]
     pb = [101325, 22632, 5474.8, 868.01, 110.9, 66.938, 3.9564, 0.39814]; % [Pa]
-    rhob = [1.2250]; %[kg/m³]
     M0 = 28.9644; %[kg/kmol]
-    ab = [340.294]; %[m/s]
-    mub = [1.7894e-5]; %[kg/ms]
     
     
 % Determine number of input altitudes
