@@ -48,6 +48,7 @@ muScaled = mu ./ mu0;
 figure
 hold on
 grid on
+ylim([0 86e3])
 xlim([0 1])
 
 plot(TScaled(:), altitudes(:), 'Color', 'red', 'LineWidth', 1)
