@@ -51,13 +51,10 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
     nInput = length(Z);
     
 % Convert input (geometric altitude) to geopotential altitude for
-% calculations. Conversion is done as an individual operation for every
-% altitude in the loop later
-    g = @(Z) g0 .* (r0./(r0+Z)).^2;   % function for calculation of g
+% calculations (eq 18 in document)
+    H = (r0.*Z)./(r0 + Z);
 
 % Initialize arrays just so they don't change size every iteration later
-    H = zeros(size(Z));
-
     T = zeros(size(Z));
     P = zeros(size(Z));
     rho = zeros(size(Z));
@@ -66,10 +63,6 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
         
 % Main loop for all calculations
     for j = 1:nInput
-
-        % Integral wants scalars so we do it separately for each altitude value
-        H(j) = 1/g0 .* integral(g, 0, Z(j));
-
         % Determine which layer we are in. Outside of boundaries all
         % properties will be set to NaN.
         b = 1;
