@@ -16,8 +16,7 @@ function [T, P, rho, a, mu, liuID1, liuID2] = ISAfunction(Z)
 %   (scalar or vector) mu     Dynamic viscosity, kg/(m*s)
 %
 % References
-%   <Reference List like Papers>
-%   ...
+%   Lab Reference Document (US Standard Atmosphere 1976)
 %
 % Authors
     liuID1 = "nikgi434"; % Niklas Gierse

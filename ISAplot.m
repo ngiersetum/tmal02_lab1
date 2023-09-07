@@ -4,8 +4,7 @@
 %   ISAfunction.m
 %
 % References
-%   <Reference List like Papers>
-%   ...
+%   Lab Reference Document (US Standard Atmosphere 1976)
 %
 % Authors
 %   Niklas Gierse           [nikgi434]
